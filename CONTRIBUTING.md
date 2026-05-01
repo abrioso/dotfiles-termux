@@ -6,12 +6,12 @@ This project uses **gitflow**:
 
 | Branch | Purpose | Merges into |
 |--------|---------|-------------|
-| `main` | Stable releases | — |
-| `develop` | Next release integration | `main` (via release PR) |
-| `feature/*` | New functionality | `develop` |
-| `fix/*`     | Bug fixes         | `develop` |
-| `hotfix/*`  | Critical fixes    | `main` + `develop` |
-| `release/*` | Release prep | `main` |
+| main | Stable releases | — |
+| develop | Next release integration | main (via release PR) |
+| feature/* | New functionality | develop |
+| fix/* | Non-critical fixes | develop |
+| hotfix/* | Critical fixes | main + develop |
+| release/* | Release prep | main |
 
 ## How to Contribute
 
@@ -40,8 +40,8 @@ This project uses **gitflow**:
 
 ## Code Standards
 
-### Shell Scripts
-- Use `#!/bin/bash` with `set -euo pipefail`
+### Scripts
+- Use `#!/bin/bash` with `set -euo pipefail` for new scripts. Existing scripts will be migrated incrementally.
 - Must pass `shellcheck` cleanly
 - Must be idempotent (safe to re-run)
 - Use functions for logical grouping
@@ -49,13 +49,13 @@ This project uses **gitflow**:
 
 ### Documentation
 - Update `README.md` when adding features
-- Document new packages in `docs/PACKAGES.md`
+- Document new packages in `docs/PACKAGES.md` and keep `packages.txt` updated
 - Keep lists sorted alphabetically
 
-### Dotfiles (config/)
-- Each application gets its own stow package directory
-- Follow XDG Base Directory spec where possible
-- Add comments explaining non-obvious settings
+### Dotfiles
+- Dotfiles live in the repository root (e.g., `.zshrc`, `.vimrc`)
+- `install.sh` creates symlinks from the repo to `$HOME`
+- Custom scripts go in `bin/`
 
 ## Release Process
 

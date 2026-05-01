@@ -9,7 +9,8 @@ This project uses **gitflow**:
 | `main` | Stable releases | — |
 | `develop` | Next release integration | `main` (via release PR) |
 | `feature/*` | New functionality | `develop` |
-| `hotfix/*` | Critical fixes | `main` + `develop` |
+| `fix/*`     | Bug fixes         | `develop` |
+| `hotfix/*`  | Critical fixes    | `main` + `develop` |
 | `release/*` | Release prep | `main` |
 
 ## How to Contribute

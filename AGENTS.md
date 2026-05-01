@@ -29,7 +29,7 @@ git pull origin develop
 git checkout -b feature/add-docker-config
 
 # Work, commit
-git add -A
+git add <files>
 git commit -m "feat: add docker daemon config"
 
 # Push and create PR

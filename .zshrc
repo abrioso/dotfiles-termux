@@ -3,7 +3,9 @@ export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- see https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 # To use the "agnoster" theme, you will need to install a powerline font on your system.
-ZSH_THEME="agnoster"
+#ZSH_THEME="agnoster"
+
+ZSH_THEME="af-magic"
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"

@@ -1,88 +1,64 @@
-# Path to your oh-my-zsh installation.
+# ~/.zshrc — Managed by dotfiles-termux
+# https://github.com/abrioso/dotfiles-termux
+# Kept in step with dotfiles-linux/config/zsh/.zshrc; Termux-only bits are marked.
+
+# --- Path ---
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+export EDITOR=vim
+
+# --- Oh My Zsh ---
 export ZSH="$HOME/.oh-my-zsh"
-
-# Set name of the theme to load --- see https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-# To use the "agnoster" theme, you will need to install a powerline font on your system.
-#ZSH_THEME="agnoster"
-
 ZSH_THEME="af-magic"
 
-# Set to this to use case-sensitive completion
-# CASE_SENSITIVE="true"
+# Conditional plugin loading
+plugins=(git z history-substring-search)
 
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+# External plugins (loaded if installed)
+[ -d "$ZSH/custom/plugins/zsh-autosuggestions" ] && plugins+=(zsh-autosuggestions)
+[ -d "$ZSH/custom/plugins/zsh-syntax-highlighting" ] && plugins+=(zsh-syntax-highlighting)
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+# Load Oh My Zsh
+[ -f "$ZSH/oh-my-zsh.sh" ] && source "$ZSH/oh-my-zsh.sh"
 
-# Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
+# --- Aliases ---
+alias ll='ls -alF --color=auto'
+alias la='ls -A --color=auto'
+alias l='ls -CF --color=auto'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias grep='grep --color=auto'
+alias df='df -h'
+alias du='du -h'
+alias ports='netstat -tuln'
+alias myip='curl -s ifconfig.me'
+alias reload='source ~/.zshrc'
 
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+# Termux-only
+alias pkgup='pkg update && pkg upgrade'
+alias sdcard='cd ~/storage/shared'
 
-# Uncomment the following line if pasting URLs and other text is slow.
-# DISABLE_MAGIC_FUNCTIONS="true"
+# Modern replacements (use if available)
+command -v bat &>/dev/null && alias cat='bat --paging=never'
+command -v eza &>/dev/null && alias ls='eza --icons' && alias ll='eza -la --icons'
+command -v fd &>/dev/null && alias find='fd'
 
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
+# --- History ---
+HISTSIZE=50000
+SAVEHIST=50000
+HISTFILE=~/.zsh_history
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+setopt SHARE_HISTORY
 
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+# --- Key bindings ---
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
 
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
+# --- Starship prompt (overrides ZSH_THEME if installed) ---
+command -v starship &>/dev/null && eval "$(starship init zsh)"
 
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+# --- fzf ---
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional values:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/my/custom/folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(git sublime textmate)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
-
-source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+# --- Local overrides ---
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local

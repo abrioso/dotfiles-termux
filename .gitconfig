@@ -1,0 +1,42 @@
+# ~/.gitconfig — Managed by dotfiles-termux
+# Shared defaults only (same as dotfiles-linux). Identity and machine-specific
+# values (user.name, user.email, core.hooksPath, credential.helper) live in
+# untracked ~/.gitconfig.local, which install.sh creates on first run.
+
+[include]
+    path = ~/.gitconfig.local
+
+[init]
+    defaultBranch = main
+
+[pull]
+    rebase = true
+
+[push]
+    autoSetupRemote = true
+
+[core]
+    editor = vim
+    autocrlf = input
+    pager = delta --dark 2>/dev/null || less
+
+[diff]
+    colorMoved = default
+
+[merge]
+    conflictstyle = diff3
+
+[alias]
+    st = status -sb
+    co = checkout
+    br = branch
+    ci = commit
+    ca = commit --amend
+    df = diff
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    last = log -1 HEAD
+    unstage = reset HEAD --
+    undo = reset --soft HEAD~1
+
+[color]
+    ui = auto

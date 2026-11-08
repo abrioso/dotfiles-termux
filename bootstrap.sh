@@ -93,9 +93,10 @@ if [ "$SETUP_STORAGE" = true ]; then
     fi
 fi
 
-# Link dotfiles
+# Link dotfiles (prompts for the Git identity unless GIT_USER_NAME/GIT_USER_EMAIL
+# are exported or git already knows it)
 info "Installing dotfiles..."
-"$SCRIPT_DIR/install.sh" --force
+"$SCRIPT_DIR/install.sh"
 success "Dotfiles installed."
 
 echo ""

@@ -42,7 +42,8 @@ bash bootstrap.sh
 
 `bootstrap.sh` updates Termux, installs every package in `packages.txt`, installs Oh My Zsh with
 the autosuggestions and syntax-highlighting plugins, requests storage access, and finally runs
-`install.sh`. Pass `--skip-storage` to skip the Android storage permission dialog.
+`install.sh`, which asks for your Git identity unless `GIT_USER_NAME`/`GIT_USER_EMAIL` are
+exported. Pass `--skip-storage` to skip the Android storage permission dialog.
 
 ## 🔧 Manual Steps
 
@@ -56,9 +57,10 @@ the autosuggestions and syntax-highlighting plugins, requests storage access, an
    bash install.sh --dry-run
    ```
 
-3. **Force install** (no prompts, use defaults):
+3. **Force install** (never prompts; the Git identity is taken from `GIT_USER_NAME` /
+   `GIT_USER_EMAIL` or from the existing git config, otherwise left for you to set):
    ```bash
-   bash install.sh --force
+   GIT_USER_NAME="Your Name" GIT_USER_EMAIL="you@example.com" bash install.sh --force
    ```
 
 Existing regular files that would be replaced are moved to `~/.dotfiles-backup/<timestamp>`.
@@ -67,7 +69,8 @@ Existing regular files that would be replaced are moved to `~/.dotfiles-backup/<
 
 - Add local overrides in `~/.zshrc.local` (sourced automatically)
 - Git identity and other machine-specific Git settings live in `~/.gitconfig.local`, created by
-  `install.sh` on first run and included by the tracked `.gitconfig`; the tracked file never
+  `install.sh` on first run (prompting, or from `GIT_USER_NAME`/`GIT_USER_EMAIL`, or from the
+  identity git already resolves) and included by the tracked `.gitconfig`; the tracked file never
   changes on a device
 - Add custom scripts to `bin/`; `install.sh` links them into `~/bin`, which `.zshrc` puts on `PATH`
 

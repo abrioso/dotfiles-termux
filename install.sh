@@ -119,8 +119,34 @@ EOF_LOCAL
     success "Configured Git identity in $local_config"
 }
 
-# Git identity first, so an existing ~/.gitconfig can be read before it is replaced
+# Carry the documented machine-specific keys of a pre-existing regular
+# ~/.gitconfig into ~/.gitconfig.local before the tracked file replaces it.
+# Only keys missing from the local file are copied; everything else stays in
+# the backup so shared defaults are not silently overridden.
+migrate_git_settings() {
+    local local_config="$HOME/.gitconfig.local" old_config="$HOME/.gitconfig" key value
+    command -v git >/dev/null 2>&1 || return 0
+    { [ -f "$old_config" ] && [ ! -L "$old_config" ]; } || return 0
+    for key in core.hooksPath credential.helper; do
+        if git config --file "$local_config" --get "$key" >/dev/null 2>&1; then
+            continue
+        fi
+        while IFS= read -r value; do
+            [ -n "$value" ] || continue
+            if [ "$DRY_RUN" = true ]; then
+                info "[DRY-RUN] Would carry $key=$value into $local_config"
+            else
+                git config --file "$local_config" --add "$key" "$value"
+                info "Carried $key from $old_config into $local_config"
+            fi
+        done < <(git config --file "$old_config" --get-all "$key" 2>/dev/null || true)
+    done
+}
+
+# Git identity and machine-specific keys first, so an existing ~/.gitconfig can
+# be read before it is replaced
 setup_git_config
+migrate_git_settings
 
 # Shell, editor and Git
 link "$SCRIPT_DIR/.zshrc" "$HOME/.zshrc"

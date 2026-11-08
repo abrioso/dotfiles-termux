@@ -71,7 +71,8 @@ Existing regular files that would be replaced are moved to `~/.dotfiles-backup/<
 - Git identity and other machine-specific Git settings live in `~/.gitconfig.local`, created by
   `install.sh` on first run (prompting, or from `GIT_USER_NAME`/`GIT_USER_EMAIL`, or from the
   identity git already resolves) and included by the tracked `.gitconfig`; the tracked file never
-  changes on a device
+  changes on a device. A pre-existing `~/.gitconfig` also has its `core.hooksPath` and
+  `credential.helper` carried over; the rest stays in `~/.dotfiles-backup/<timestamp>/.gitconfig`
 - Add custom scripts to `bin/`; `install.sh` links them into `~/bin`, which `.zshrc` puts on `PATH`
 
 ## 🔄 Updating this repo

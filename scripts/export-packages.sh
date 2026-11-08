@@ -22,10 +22,20 @@ if ! command -v pkg >/dev/null 2>&1; then
     exit 1
 fi
 
+# Build the list in a temporary file so a failing pipeline never truncates packages.txt
+TMP_FILE="$(mktemp "$REPO_DIR/.packages.txt.XXXXXX")"
+trap 'rm -f "$TMP_FILE"' EXIT
+
 pkg list-installed 2>/dev/null \
     | grep -v automatic \
     | grep installed \
     | awk -F/ '{print $1}' \
-    | sort -u > "$PKG_FILE"
+    | sort -u > "$TMP_FILE"
 
+if [ ! -s "$TMP_FILE" ]; then
+    echo "No installed packages found; packages.txt left unchanged." >&2
+    exit 1
+fi
+
+mv "$TMP_FILE" "$PKG_FILE"
 printf '[ OK ] Wrote %s packages to %s\n' "$(wc -l < "$PKG_FILE")" "$PKG_FILE"

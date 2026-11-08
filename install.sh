@@ -135,12 +135,15 @@ link "$SCRIPT_DIR/.colors.properties" "$TERMUX_DIR/colors.properties"
 if [ -f "$SCRIPT_DIR/.font.ttf" ]; then
     if [ -f "$TERMUX_DIR/font.ttf" ] && cmp -s "$SCRIPT_DIR/.font.ttf" "$TERMUX_DIR/font.ttf"; then
         info "Font already up to date."
-    elif [ "$DRY_RUN" = true ]; then
-        info "[DRY-RUN] Would copy font to $TERMUX_DIR/font.ttf"
     else
-        mkdir -p "$TERMUX_DIR"
-        cp "$SCRIPT_DIR/.font.ttf" "$TERMUX_DIR/font.ttf"
-        success "Installed font: $TERMUX_DIR/font.ttf"
+        backup_file "$TERMUX_DIR/font.ttf"
+        if [ "$DRY_RUN" = true ]; then
+            info "[DRY-RUN] Would copy font to $TERMUX_DIR/font.ttf"
+        else
+            mkdir -p "$TERMUX_DIR"
+            cp "$SCRIPT_DIR/.font.ttf" "$TERMUX_DIR/font.ttf"
+            success "Installed font: $TERMUX_DIR/font.ttf"
+        fi
     fi
 fi
 

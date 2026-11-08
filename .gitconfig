@@ -2,9 +2,7 @@
 # Shared defaults only (same as dotfiles-linux). Identity and machine-specific
 # values (user.name, user.email, core.hooksPath, credential.helper) live in
 # untracked ~/.gitconfig.local, which install.sh creates on first run.
-
-[include]
-    path = ~/.gitconfig.local
+# The include stays last so local values override these defaults.
 
 [init]
     defaultBranch = main
@@ -40,3 +38,8 @@
 
 [color]
     ui = auto
+
+# Machine-specific overrides. Git reads includes in place, so this must stay
+# after every shared default for local values to win.
+[include]
+    path = ~/.gitconfig.local

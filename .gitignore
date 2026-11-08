@@ -1,0 +1,11 @@
+*.swp
+*.swo
+*~
+.DS_Store
+.env
+.env.local
+*.log
+
+# Python bytecode from bin/ scripts
+__pycache__/
+*.pyc

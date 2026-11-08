@@ -133,7 +133,8 @@ link "$SCRIPT_DIR/.colors.properties" "$TERMUX_DIR/colors.properties"
 
 # Font: Termux reads the file directly, so copy it instead of linking
 if [ -f "$SCRIPT_DIR/.font.ttf" ]; then
-    if [ -f "$TERMUX_DIR/font.ttf" ] && cmp -s "$SCRIPT_DIR/.font.ttf" "$TERMUX_DIR/font.ttf"; then
+    if [ -f "$TERMUX_DIR/font.ttf" ] && [ ! -L "$TERMUX_DIR/font.ttf" ] \
+        && cmp -s "$SCRIPT_DIR/.font.ttf" "$TERMUX_DIR/font.ttf"; then
         info "Font already up to date."
     else
         backup_file "$TERMUX_DIR/font.ttf"

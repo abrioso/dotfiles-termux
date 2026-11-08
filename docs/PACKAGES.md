@@ -6,7 +6,8 @@ This repository uses `packages.txt` in the root directory to track installed Ter
 
 - `packages.txt` contains one package name per line (alphabetically sorted)
 - `bootstrap.sh` reads this file and installs all listed packages via `pkg install`
-- To add a package: install it, then regenerate the list or add manually
+- Comment lines (`#`) and blank lines are ignored by `bootstrap.sh`
+- To add a package: install it, then run `scripts/export-packages.sh` or add it manually
 
 ## Package categories
 
@@ -31,5 +32,8 @@ zsh, tmux, htop, ripgrep
 ## Updating the package list
 
 ```bash
-pkg list-installed 2>/dev/null | grep -v automatic | grep installed | awk -F/ '{print $1}' | sort > packages.txt
+scripts/export-packages.sh
 ```
+
+The script keeps only explicitly installed packages (dependencies marked `automatic` are
+excluded), sorts them and overwrites `packages.txt`. Review the diff before committing.

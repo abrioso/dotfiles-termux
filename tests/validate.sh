@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # validate.sh — Runs the same repository validation locally and in CI.
 #
 # Checks every tracked shell script with `bash -n` and shellcheck, parses any

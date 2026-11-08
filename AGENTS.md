@@ -1,15 +1,18 @@
 # AI Agent Instructions
 
 This repository follows **gitflow** branching and requires **Pull Requests** for all changes.
+It shares its policy with [dotfiles-windows](https://github.com/abrioso/dotfiles-windows) and
+[dotfiles-linux](https://github.com/abrioso/dotfiles-linux); `dotfiles-windows` is the reference.
 
 ## Branching Model
 
 - `main` — production-ready, tagged releases only
 - `develop` — integration branch for next release
 - `feature/<name>` — new features (branch from `develop`)
-- `fix/<name>` — non-critical fixes (branch from `develop`)
+- `fix/<name>` — non-urgent fixes (branch from `develop`)
 - `hotfix/<name>` — urgent fixes (branch from `main`, merge to both `main` and `develop`)
-- `release/<version>` — release prep (branch from `develop`, merge to `main`)
+- `release/<version>` — release prep (branch from `develop`; merge to `main` and reconcile
+  release-only commits back to `develop` before deletion)
 
 ## Rules for Agents
 
@@ -18,7 +21,7 @@ This repository follows **gitflow** branching and requires **Pull Requests** for
 3. **Commits**: Use conventional commits (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`)
 4. **One logical change per PR** — don't bundle unrelated changes.
 5. **PR description**: Explain what and why. Link related issues if any.
-6. **Tests/validation**: Run shellcheck on .sh files before committing (for new/modified scripts).
+6. **Tests/validation**: Run `./tests/validate.sh` (syntax, shellcheck, Python parse, whitespace) before committing.
 7. **Worktrees**: Use `git worktree` for parallel work instead of stashing or switching branches.
 
 ## Workflow Example
@@ -29,7 +32,8 @@ git checkout develop
 git pull origin develop
 git checkout -b feature/add-docker-config
 
-# Work, commit
+# Work, validate, commit
+./tests/validate.sh
 git add <relevant-files>
 git commit -m "feat: add docker daemon config"
 
@@ -40,9 +44,16 @@ gh pr create --base develop --title "feat: add docker config" --body "Adds daemo
 
 ## Code Standards
 
-- Shell scripts: `#!/bin/bash` with `set -euo pipefail`
+- Shell scripts: `#!/usr/bin/env bash` (Termux has no `/bin/bash`; `termux-exec` rewrites this
+  shebang) with `set -euo pipefail`
 - Pass `shellcheck` with no warnings
+- Exception: `git-hooks/*` are POSIX `#!/bin/sh` scripts without strict mode, shared verbatim with
+  `dotfiles-windows` (Git for Windows runs hooks through its own `sh`). Keep the three copies
+  byte-identical and change them in all repositories at once; never bash-ify one copy
 - All scripts must be idempotent (safe to re-run)
+- Machine-specific values (Git identity, hooks path) live in untracked `~/.gitconfig.local` and
+  `~/.zshrc.local`, never in tracked files
+- Keep `.zshrc` and `.vimrc` in step with `dotfiles-linux`; mark Termux-only lines with a comment
 - Document new features in README.md and new packages in docs/PACKAGES.md
 - Keep package lists sorted alphabetically
 

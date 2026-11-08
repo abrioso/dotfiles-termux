@@ -1,0 +1,24 @@
+* text=auto
+
+# Explicit EOL rules: everything tracked here is consumed on Android/Linux, so keep LF
+*.sh text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.properties text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+.gitconfig text eol=lf
+.zshrc text eol=lf
+.vimrc text eol=lf
+
+# Ensure attributes file itself uses LF in repo
+.gitattributes text eol=lf
+
+# Treat common binary formats as binary
+*.ttf binary
+*.otf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary

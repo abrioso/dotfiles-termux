@@ -141,6 +141,9 @@ if [ -f "$SCRIPT_DIR/.font.ttf" ]; then
             info "[DRY-RUN] Would copy font to $TERMUX_DIR/font.ttf"
         else
             mkdir -p "$TERMUX_DIR"
+            # A symlinked font.ttf is replaced by the link itself, never by
+            # writing through it into the link target.
+            [ -L "$TERMUX_DIR/font.ttf" ] && rm -f "$TERMUX_DIR/font.ttf"
             cp "$SCRIPT_DIR/.font.ttf" "$TERMUX_DIR/font.ttf"
             success "Installed font: $TERMUX_DIR/font.ttf"
         fi

@@ -73,6 +73,7 @@ fi
 
 # Zsh plugins (same set as dotfiles-linux)
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+mkdir -p "$ZSH_CUSTOM/plugins"
 if [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]; then
     info "Installing zsh-autosuggestions..."
     git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"

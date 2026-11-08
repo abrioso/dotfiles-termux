@@ -37,6 +37,8 @@ This project uses **gitflow**. See [docs/GITFLOW.md](docs/GITFLOW.md) for the fu
 - Must be idempotent (safe to re-run)
 - Use functions for logical grouping
 - Add `--help` flag for user-facing scripts
+- `git-hooks/*` are the exception: POSIX `#!/bin/sh` without strict mode, byte-identical to the
+  copies in `dotfiles-windows` and the sibling repository. Edit them in all repositories together
 - Python helpers in `bin/` start with `#!/usr/bin/env python3` and are executable
 
 Run `./tests/validate.sh --base-ref origin/develop` before committing. This is the same

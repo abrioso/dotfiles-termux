@@ -85,10 +85,10 @@ setup_git_config() {
         return 0
     fi
     if [ -z "$git_name" ]; then
-        git_name="${GIT_USER_NAME:-$(git config --global --get user.name 2>/dev/null || true)}"
+        git_name="${GIT_USER_NAME:-$(git config --global --includes --get user.name 2>/dev/null || true)}"
     fi
     if [ -z "$git_email" ]; then
-        git_email="${GIT_USER_EMAIL:-$(git config --global --get user.email 2>/dev/null || true)}"
+        git_email="${GIT_USER_EMAIL:-$(git config --global --includes --get user.email 2>/dev/null || true)}"
     fi
     if [ "$FORCE" = false ] && [ "$DRY_RUN" = false ]; then
         if [ -z "$git_name" ]; then
@@ -120,7 +120,8 @@ EOF_LOCAL
 }
 
 # Carry the documented machine-specific keys of a pre-existing ~/.gitconfig
-# (regular file or symlink to another manager's file) into ~/.gitconfig.local before the tracked file replaces it.
+# (regular file or symlink to another manager's file, following its [include]
+# directives) into ~/.gitconfig.local before the tracked file replaces it.
 # Only keys missing from the local file are copied; everything else stays in
 # the backup so shared defaults are not silently overridden.
 migrate_git_settings() {
@@ -136,15 +137,16 @@ migrate_git_settings() {
         if git config --file "$local_config" --get "$key" >/dev/null 2>&1; then
             continue
         fi
+        # Empty values are kept: an empty credential.helper entry is Git's way
+        # of resetting helpers inherited from the system configuration.
         while IFS= read -r value; do
-            [ -n "$value" ] || continue
             if [ "$DRY_RUN" = true ]; then
                 info "[DRY-RUN] Would carry $key=$value into $local_config"
             else
                 git config --file "$local_config" --add "$key" "$value"
                 info "Carried $key from $old_config into $local_config"
             fi
-        done < <(git config --file "$old_config" --get-all "$key" 2>/dev/null || true)
+        done < <(git config --file "$old_config" --includes --get-all "$key" 2>/dev/null || true)
     done
 }
 

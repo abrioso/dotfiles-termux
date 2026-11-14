@@ -136,8 +136,9 @@ migrate_git_settings() {
         if git config --file "$local_config" --get "$key" >/dev/null 2>&1; then
             continue
         fi
+        # Empty values are kept: an empty credential.helper entry is Git's way
+        # of resetting helpers inherited from the system configuration.
         while IFS= read -r value; do
-            [ -n "$value" ] || continue
             if [ "$DRY_RUN" = true ]; then
                 info "[DRY-RUN] Would carry $key=$value into $local_config"
             else

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import ffmpeg
 import os
 import sys
